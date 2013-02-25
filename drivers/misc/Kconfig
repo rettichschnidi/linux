@@ -485,6 +485,13 @@ config VEXPRESS_SYSCFG
 	  bus. System Configuration interface is one of the possible means
 	  of generating transactions on this bus.
 
+config UBOOT_BOOTCOUNT
+	tristate "U-Boot Bootcount driver"
+	depends on OF
+	help
+	  The U-Boot Bootcount driver allows to access the
+	  bootcounter through sysFS file.
+
 config ASPEED_LPC_CTRL
 	depends on (ARCH_ASPEED || COMPILE_TEST) && REGMAP && MFD_SYSCON
 	tristate "Aspeed ast2400/2500 HOST LPC to BMC bridge control"
