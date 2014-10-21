@@ -1,6 +1,8 @@
 /*
  * Copyright 2013 Maxime Ripard
  *
+ * This is based on sun7i-a20-olinuxino-micro.dts
+ * 
  * Maxime Ripard <maxime.ripard@free-electrons.com>
  *
  * The code contained herein is licensed under the GNU General Public
@@ -92,6 +94,13 @@
 				allwinner,pull = <1>;
 			};
 
+			ahci_pwr_pin_oa20som: ahci_pwr_pin@1 {
+				allwinner,pins = "PC3";
+				allwinner,function = "gpio_out";
+				allwinner,drive = <0>;
+				allwinner,pull = <0>;
+			};
+
 			led_pins_olinuxino: led_pins@0 {
 				allwinner,pins = "PH2";
 				allwinner,function = "gpio_out";
@@ -172,6 +181,8 @@
 	};
 
 	reg_ahci_5v: ahci-5v {
+		pinctrl-0 = <&ahci_pwr_pin_oa20som>;
+		gpio = <&pio 2 3 0>;
 		status = "okay";
 	};
 
