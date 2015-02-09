@@ -66,7 +66,11 @@ static int do_account_vtime(struct task_struct *tsk, int hardirq_offset)
 	clock = S390_lowcore.last_update_clock;
 	asm volatile(
 		"	stpt	%0\n"	/* Store current cpu timer value */
+#ifdef CONFIG_HAVE_MARCH_Z9_109_FEATURES
+		"	stckf	%1"	/* Store current tod clock value */
+#else
 		"	stck	%1"	/* Store current tod clock value */
+#endif
 		: "=m" (S390_lowcore.last_update_timer),
 		  "=m" (S390_lowcore.last_update_clock));
 	S390_lowcore.system_timer += timer - S390_lowcore.last_update_timer;
@@ -123,8 +127,6 @@ void vtime_account_irq_enter(struct task_struct *tsk)
 {
 	struct thread_info *ti = task_thread_info(tsk);
 	u64 timer, system;
-
-	WARN_ON_ONCE(!irqs_disabled());
 
 	timer = S390_lowcore.last_update_timer;
 	S390_lowcore.last_update_timer = get_vtimer();
