@@ -90,6 +90,9 @@
 
 &uart2 {
 	status = "okay";
+
+	rts-gpios = <&gpio1 8 GPIO_ACTIVE_LOW>;
+	cts-gpios = <&gpio1 9 GPIO_ACTIVE_LOW>;
 };
 
 &i2c {
