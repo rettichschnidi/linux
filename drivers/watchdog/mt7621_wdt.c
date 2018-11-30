@@ -16,6 +16,7 @@
 #include <linux/kernel.h>
 #include <linux/watchdog.h>
 #include <linux/moduleparam.h>
+#include <linux/of.h>
 #include <linux/platform_device.h>
 
 #include <asm/mach-ralink/ralink_regs.h>
