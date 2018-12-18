@@ -14,7 +14,6 @@
 		reg = <0x0 0x8000000>;
 	};
 
-#if 0 // test-only: not enabled to not conflict with current scripts
 	leds {
 		compatible = "gpio-leds";
 
@@ -71,8 +70,19 @@
 			gpios = <&gpio0 28 GPIO_ACTIVE_HIGH>;
 			default-state = "off";
 		};
+
+		ethernet_link {
+			label = "smartgw:eth:link";
+			gpios = <&gpio0 3 GPIO_ACTIVE_LOW>;
+			default-state = "off";
+		};
+
+		ethernet_activity {
+			label = "smartgw:eth:act";
+			gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
+			default-state = "off";
+		};
 	};
-#endif
 
 	aliases {
 		serial0 = &uartlite;
