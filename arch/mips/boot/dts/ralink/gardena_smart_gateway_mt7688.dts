@@ -74,13 +74,13 @@
 		ethernet_link {
 			label = "smartgw:eth:link";
 			gpios = <&gpio0 3 GPIO_ACTIVE_LOW>;
-			default-state = "off";
+			linux,default-trigger = "netdev";
 		};
 
 		ethernet_activity {
 			label = "smartgw:eth:act";
 			gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
-			default-state = "off";
+			linux,default-trigger = "netdev";
 		};
 	};
 
