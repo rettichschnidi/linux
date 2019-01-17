@@ -14,6 +14,16 @@
 		reg = <0x0 0x8000000>;
 	};
 
+	gpio-keys {
+		compatible = "gpio-keys";
+
+		user_btn1 {
+			label = "USER_BTN1";
+			gpios = <&gpio0 11 GPIO_ACTIVE_LOW>;
+			linux,code =<KEY_PROG1> ;
+		};
+	};
+
 	leds {
 		compatible = "gpio-leds";
 
