@@ -19,7 +19,7 @@
 
 		user_btn1 {
 			label = "USER_BTN1";
-			gpios = <&gpio0 11 GPIO_ACTIVE_LOW>;
+			gpios = <&gpio 11 GPIO_ACTIVE_LOW>;
 			linux,code =<KEY_PROG1> ;
 		};
 	};
@@ -29,67 +29,67 @@
 
 		power_blue {
 			label = "smartgw:power:blue";
-			gpios = <&gpio0 18 GPIO_ACTIVE_HIGH>;
+			gpios = <&gpio 18 GPIO_ACTIVE_HIGH>;
 			default-state = "off";
 		};
 
 		power_green {
 			label = "smartgw:power:green";
-			gpios = <&gpio0 19 GPIO_ACTIVE_HIGH>;
+			gpios = <&gpio 19 GPIO_ACTIVE_HIGH>;
 			default-state = "off";
 		};
 
 		power_red {
 			label = "smartgw:power:red";
-			gpios = <&gpio0 22 GPIO_ACTIVE_HIGH>;
+			gpios = <&gpio 22 GPIO_ACTIVE_HIGH>;
 			default-state = "off";
 		};
 
 		radio_blue {
 			label = "smartgw:radio:blue";
-			gpios = <&gpio0 23 GPIO_ACTIVE_HIGH>;
+			gpios = <&gpio 23 GPIO_ACTIVE_HIGH>;
 			default-state = "off";
 		};
 
 		radio_green {
 			label = "smartgw:radio:green";
-			gpios = <&gpio0 24 GPIO_ACTIVE_HIGH>;
+			gpios = <&gpio 24 GPIO_ACTIVE_HIGH>;
 			default-state = "off";
 		};
 
 		radio_red {
 			label = "smartgw:radio:red";
-			gpios = <&gpio0 25 GPIO_ACTIVE_HIGH>;
+			gpios = <&gpio 25 GPIO_ACTIVE_HIGH>;
 			default-state = "off";
 		};
 
 		internet_blue {
 			label = "smartgw:internet:blue";
-			gpios = <&gpio0 26 GPIO_ACTIVE_HIGH>;
+			gpios = <&gpio 26 GPIO_ACTIVE_HIGH>;
 			default-state = "off";
 		};
 
 		internet_green {
 			label = "smartgw:internet:green";
-			gpios = <&gpio0 27 GPIO_ACTIVE_HIGH>;
+			gpios = <&gpio 27 GPIO_ACTIVE_HIGH>;
 			default-state = "off";
 		};
 
 		internet_red {
 			label = "smartgw:internet:red";
-			gpios = <&gpio0 28 GPIO_ACTIVE_HIGH>;
+			gpios = <&gpio 28 GPIO_ACTIVE_HIGH>;
 			default-state = "off";
 		};
 
 		ethernet_link {
 			label = "smartgw:eth:link";
-			gpios = <&gpio0 3 GPIO_ACTIVE_LOW>;
+			gpios = <&gpio 3 GPIO_ACTIVE_LOW>;
 			linux,default-trigger = "netdev";
 		};
 
 		ethernet_activity {
 			label = "smartgw:eth:act";
-			gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
+			gpios = <&gpio 43 GPIO_ACTIVE_LOW>;
 			linux,default-trigger = "netdev";
 		};
 	};
@@ -164,15 +164,15 @@
 &uart1 {
 	status = "okay";
 
-	rts-gpios = <&gpio0 1 GPIO_ACTIVE_LOW>;
-	cts-gpios = <&gpio0 2 GPIO_ACTIVE_LOW>;
+	rts-gpios = <&gpio 1 GPIO_ACTIVE_LOW>;
+	cts-gpios = <&gpio 2 GPIO_ACTIVE_LOW>;
 };
 
 &uart2 {
 	status = "okay";
 
-	rts-gpios = <&gpio1 8 GPIO_ACTIVE_LOW>;
-	cts-gpios = <&gpio1 9 GPIO_ACTIVE_LOW>;
+	rts-gpios = <&gpio 40 GPIO_ACTIVE_LOW>;
+	cts-gpios = <&gpio 41 GPIO_ACTIVE_LOW>;
 };
 
 &i2c {
