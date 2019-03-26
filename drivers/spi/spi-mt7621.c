@@ -81,17 +81,6 @@ static void mt7621_spi_set_cs(struct spi_device *spi, int enable)
 	struct mt7621_spi *rs = spidev_to_mt7621_spi(spi);
 	int cs = spi->chip_select;
 	u32 polar = 0;
-	u32 master;
-
-	/*
-	 * Select SPI device 7, enable "more buffer mode" and disable
-	 * full-duplex (only half-duplex really works on this chip
-	 * reliably)
-	 */
-	master = mt7621_spi_read(rs, MT7621_SPI_MASTER);
-	master |= MASTER_RS_SLAVE_SEL | MASTER_MORE_BUFMODE;
-	master &= ~MASTER_FULL_DUPLEX;
-	mt7621_spi_write(rs, MT7621_SPI_MASTER, master);
 
 	rs->pending_write = 0;
 
@@ -261,9 +250,11 @@ static int mt7621_spi_transfer_one_message(struct spi_controller *master,
 		if (t->speed_hz < speed)
 			speed = t->speed_hz;
 
-	if (mt7621_spi_prepare(spi, speed)) {
-		status = -EIO;
-		goto msg_done;
+	if (rs->speed != speed) {
+		if (mt7621_spi_prepare(spi, speed)) {
+			status = -EIO;
+			goto msg_done;
+		}
 	}
 
 	/* Assert CS */
@@ -303,6 +294,17 @@ msg_done:
 static int mt7621_spi_setup(struct spi_device *spi)
 {
 	struct mt7621_spi *rs = spidev_to_mt7621_spi(spi);
+	u32 master;
+
+	/*
+	 * Select SPI device 7, enable "more buffer mode" and disable
+	 * full-duplex (only half-duplex really works on this chip
+	 * reliably)
+	 */
+	master = mt7621_spi_read(rs, MT7621_SPI_MASTER);
+	master |= MASTER_RS_SLAVE_SEL | MASTER_MORE_BUFMODE;
+	master &= ~MASTER_FULL_DUPLEX;
+	mt7621_spi_write(rs, MT7621_SPI_MASTER, master);
 
 	if ((spi->max_speed_hz == 0) ||
 	    (spi->max_speed_hz > (rs->sys_freq / 2)))
