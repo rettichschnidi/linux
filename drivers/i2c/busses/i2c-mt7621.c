@@ -128,11 +128,12 @@ static void mtk_i2c_reset(struct mtk_i2c *i2c)
 {
 	device_reset(i2c->adap.dev.parent);
 	barrier();
-	mtk_i2c_w32(i2c,
-		   SM0CTL0_ODRAIN
-		   | ((i2c->clk_div << 16) & SM0CTL0_CLK_DIV_MASK)
-		   | SM0CTL0_EN
-		   | SM0CTL0_SCL_STRETCH, REG_SM0CTL0_REG);
+	/*
+	 * Don't set SM0CTL0_ODRAIN as its bit meaning is inverted. To
+	 * configure open-drain mode, this bit needs to be cleared.
+	 */
+	mtk_i2c_w32(i2c, ((i2c->clk_div << 16) & SM0CTL0_CLK_DIV_MASK) |
+		    SM0CTL0_EN | SM0CTL0_SCL_STRETCH, REG_SM0CTL0_REG);
 	mtk_i2c_w32(i2c, 0, REG_SM0CFG2_REG);
 }
 
