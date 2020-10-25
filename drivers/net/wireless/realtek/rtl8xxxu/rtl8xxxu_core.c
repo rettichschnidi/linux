@@ -4758,6 +4758,7 @@ rtl8xxxu_bss_info_changed(struct ieee80211_hw *hw, struct ieee80211_vif *vif,
                         bit_rate = cfg80211_calculate_bitrate(&rarpt->txrate);
 			rarpt->bit_rate = bit_rate;
                         rarpt->desc_rate = highest_rate;
+			rarpt->init_desc_rate = highest_rate;
 
 			priv->vif = vif;
 			priv->rssi_level = RTL8XXXU_RATR_STA_INIT;
@@ -4777,6 +4778,8 @@ rtl8xxxu_bss_info_changed(struct ieee80211_hw *hw, struct ieee80211_vif *vif,
 			val8 = rtl8xxxu_read8(priv, REG_BEACON_CTRL);
 			val8 |= BEACON_DISABLE_TSF_UPDATE;
 			rtl8xxxu_write8(priv, REG_BEACON_CTRL, val8);
+
+			rarpt->init_desc_rate = 0;
 
 			priv->fops->report_connect(priv, 0, false);
 		}
@@ -5055,6 +5058,15 @@ rtl8xxxu_fill_txdesc_v1(struct ieee80211_hw *hw, struct ieee80211_hdr *hdr,
 		tx_desc->txdw5 |= cpu_to_le32(TXDESC32_RETRY_LIMIT_ENABLE);
 	}
 
+	// Nothing passed from mac80211 rate control.
+	if (!rate && priv->ra_report.init_desc_rate != 0) {
+                if (ieee80211_is_data_qos(hdr->frame_control)) {
+			struct rtl8xxxu_ra_report *rarpt;
+			rarpt = &priv->ra_report;
+			tx_desc->txdw5 = cpu_to_le32(rarpt->desc_rate);
+                }
+        }
+
 	if (ieee80211_is_data_qos(hdr->frame_control))
 		tx_desc->txdw4 |= cpu_to_le32(TXDESC32_QOS);
 
@@ -5129,6 +5141,15 @@ rtl8xxxu_fill_txdesc_v2(struct ieee80211_hw *hw, struct ieee80211_hdr *hdr,
 			cpu_to_le32(6 << TXDESC40_RETRY_LIMIT_SHIFT);
 		tx_desc40->txdw4 |= cpu_to_le32(TXDESC40_RETRY_LIMIT_ENABLE);
 	}
+
+	// Nothing passed from mac80211 rate control
+        if (!rate && priv->ra_report.init_desc_rate != 0) {
+                if (ieee80211_is_data_qos(hdr->frame_control)) {
+			struct rtl8xxxu_ra_report *rarpt;
+			rarpt = &priv->ra_report;
+			tx_desc40->txdw4 = cpu_to_le32(rarpt->desc_rate);
+                }
+        }
 
 	if (short_preamble)
 		tx_desc40->txdw5 |= cpu_to_le32(TXDESC40_SHORT_PREAMBLE);
@@ -5255,7 +5276,6 @@ static void rtl8xxxu_tx(struct ieee80211_hw *hw,
 		rts_rate = ieee80211_get_rts_cts_rate(hw, tx_info)->hw_value;
 	else
 		rts_rate = 0;
-
 
 	priv->fops->fill_txdesc(hw, hdr, tx_info, tx_desc, sgi, short_preamble,
 				ampdu_enable, rts_rate);
@@ -6797,6 +6817,7 @@ static int rtl8xxxu_probe(struct usb_interface *interface,
 	spin_lock_init(&priv->c2hcmd_lock);
 	INIT_WORK(&priv->c2hcmd_work, rtl8xxxu_c2hcmd_callback);
 	skb_queue_head_init(&priv->c2hcmd_queue);
+	memset(&priv->ra_report, 0, sizeof(struct rtl8xxxu_ra_report));
 
 	usb_set_intfdata(interface, hw);
 

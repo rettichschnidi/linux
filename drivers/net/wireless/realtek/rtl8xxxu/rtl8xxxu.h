@@ -1276,6 +1276,7 @@ struct rtl8xxxu_ra_report {
 	struct rate_info txrate;
 	u32 bit_rate;
 	u8 desc_rate;
+	u8 init_desc_rate;
 };
 
 struct rtl8xxxu_priv {
