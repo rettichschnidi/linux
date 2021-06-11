@@ -166,8 +166,13 @@
 		};
 
 		memory-controller@300 {
-			compatible = "ralink,mt7620a-memc";
+			compatible = "ralink,mt7620a-memc", "ralink,rt3050-memc";
 			reg = <0x300 0x100>;
+
+			resets = <&resetc 10>;
+
+			interrupt-parent = <&intc>;
+			interrupts = <3>;
 		};
 
 		gpio: gpio@600 {
@@ -306,8 +311,8 @@
 		interrupt-parent = <&cpuintc>;
 		interrupts = <5>;
 
-		resets = <&resetc 21>;
-		reset-names = "fe";
+		resets = <&resetc 21 &resetc 23>;
+		reset-names = "fe", "esw";
 
 		status = "disabled";
 	};
@@ -316,7 +321,7 @@
 		compatible = "ralink,rt3050-esw";
 		reg = <0x10110000 0x8000>;
 
-		resets = <&resetc 23>;
+		resets = <&resetc 24>;
 		reset-names = "esw";
 
 		interrupt-parent = <&intc>;
